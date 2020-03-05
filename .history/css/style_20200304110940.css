@@ -1,0 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#slide {
+  background-image: url('/img/slide.jpg');
+  height: 640px;
+}

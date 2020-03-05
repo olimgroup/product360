@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div id="arc-slider">
+    <img src="" alt="">
+  </div>
+  <script src="js/script.js"></script>
+  <script>
+    const arcSlider = new ArcSlider('#arc-slider', {
+      src: 'img/slide.jpg',
+      sensitivity: 2,
+      auto: true,
+    });
+
+    ArcSlider.element = 'test'
+    // console.log(ArcSlider.element = 'test');
+    console.log(arcSlider);
+  </script>
+</body>
+
+</html>
