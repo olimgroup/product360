@@ -1,7 +1,9 @@
 # product360
 Product 360 viewer
 
+DEMO
 
+[https://olimgroup.github.io/product360/index.html](https://olimgroup.github.io/product360/index.html)
 
 Example:
 ```
