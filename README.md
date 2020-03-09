@@ -3,7 +3,9 @@ Product 360 viewer
 
 DEMO
 
-[https://olimgroup.github.io/product360/index.html](https://olimgroup.github.io/product360/index.html)
+Basic: [https://olimgroup.github.io/product360/index.html](https://olimgroup.github.io/product360/index.html)
+
+Image loading: [https://olimgroup.github.io/product360/demo/index.html](https://olimgroup.github.io/product360/demo/index.html)
 
 Example:
 ```
