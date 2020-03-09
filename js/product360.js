@@ -208,7 +208,6 @@
     const img = new Image();
     img.src = src;
     img.addEventListener('load', (e) => {
-      console.log(e);
       if (e.target) {
         callback(e.target.width, e.target.height);
       } else {
