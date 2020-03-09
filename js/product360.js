@@ -22,6 +22,8 @@
       isMobile: null,
       sliderHeight: null,
       sliderWidth: null,
+      initFn: null,
+      loadedFn: null,
     }
 
     for (let init in this.initial) {
@@ -35,6 +37,7 @@
     }
 
     this.options = Object.assign({}, this.default, setting);
+    this.options.init && this.options.init();
     this.src = this.options.src;
     this.image = setting.image;
 
@@ -45,6 +48,7 @@
       this.width = x / this.options.page;
       this.height = y;
       this._init();
+      this.options.loaded && this.options.loaded();
     });
   }
 
@@ -179,6 +183,16 @@
     this._addEvent();
   }
 
+  Product360.prototype.init = function (callback) {
+    this.initFn = callback;
+    console.log(callback);
+  }
+
+  Product360.prototype.loaded = function (callback) {
+    this.loadedFn = callback;
+    console.log(callback);
+  }
+
   // Util
   function Util() { }
 
@@ -196,7 +210,6 @@
     const img = new Image();
     img.src = src;
     img.addEventListener('load', (e) => {
-      console.log(e);
       callback(e.path[0].width, e.path[0].height);
     });
   }
