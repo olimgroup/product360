@@ -210,7 +210,12 @@
     const img = new Image();
     img.src = src;
     img.addEventListener('load', (e) => {
-      callback(e.path[0].width, e.path[0].height);
+      console.log(e);
+      if (e.target) {
+        callback(e.target.width, e.target.height);
+      } else {
+        callback(e.path[0].width, e.path[0].height);
+      }
     });
   }
 

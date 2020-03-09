@@ -25,42 +25,50 @@
       width: 100%;
     }
 
-    .notice {
+    .intro {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px;
-      background-color: rgba(255,255,255,.8);
-      border-radius: 4px;
-      color: #000;
-      text-align: center;
-      /* transition: opacity 500ms ease; */
-      animation: hide 2s;
+      top: 0;
+      left: 0;
+      transition: opacity 500ms ease;
+      transition-delay: 300ms;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, .2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .notice img {
+    .intro img {
       width: 50px;
     }
 
-    .notice p {
+    .intro p {
       font-size: 14px;
     }
 
-    @keyframes hide {
-      0% {
-        display: block;
-        opacity: 1;
-      }
+    .intro.hide {
+      opacity: 0;
+    }
 
-      99% {
-        opacity: 1;
-      }
+    .intro .notice,
+    .intro .loading {
+      padding: 20px;
+      background-color: rgba(255, 255, 255);
+      border-radius: 4px;
+      color: #000;
+      text-align: center;
+      max-width: 40%;
+      transition: opacity 300ms ease;
+    }
 
-      100% {
-        opacity: 0;
-        display: none;
-      }
+    .intro .notice {
+      display: none;
+    }
+
+    .intro .loading.hide,
+    .intro .notice.hide {
+      opacity: 0;
     }
   </style>
 </head>
@@ -68,15 +76,24 @@
 <body>
   <div class="slider__wrap">
     <div id="slider" class="slider"></div>
-    <div class="notice">
-      <img src="img/vr.svg" alt="">
-      <p>화면위에서 마우스 드래그 혹은 터치로 움직여주세요.</p>
+    <div class="intro">
+      <div class="loading">
+        <p>로딩중입니다</p>
+      </div>
+
+      <div class="notice">
+        <img src="img/vr.svg" alt="">
+        <p>화면위에서 마우스 드래그 혹은 터치로 움직여주세요.</p>
+      </div>
     </div>
   </div>
-  <!-- <script src="https://cdn.zipview.kr/public/javascript/product360.js"></script> -->
-  <script src="../js/product360.js"></script>
+  <script src="https://cdn.zipview.kr/public/javascript/product360.js"></script>
+  <!-- <script src="../js/product360.js"></script> -->
   <script>
+    const intro = document.querySelector('.intro');
+    const loading = document.querySelector('.loading');
     const notice = document.querySelector('.notice');
+    const slider = document.querySelector('#slider')
 
     const pdSlider = new Product360('#slider', {
       src: 'https://cdn.zipview.kr/webvr/service/DEMO/estate/ISO/iso001.jpg',
@@ -85,10 +102,33 @@
         console.log('init');
       },
       loaded() {
-        console.log('loaded');
-        notice.classList
-        // notice.style.opacity = 0;
-        // notice.style.display = 'none';
+        let introAni;
+        loading.classList.add('hide');
+        loading.addEventListener('transitionend', loadingIntro);
+
+        function loadingIntro() {
+          loading.style.display = 'none';
+          notice.style.display = 'block';
+          introAni = setTimeout(closeIntro, 1500);
+          intro.addEventListener('click', onClickIntro);
+        }
+
+        function onClickIntro() {
+          clearTimeout(introAni);
+          closeIntro();
+        }
+
+        function closeIntro() {
+          intro.classList.add('hide');
+          intro.addEventListener('transitionend', clearEvent);
+        }
+
+        function clearEvent() {
+          intro.style.display = 'none';
+          loading.removeEventListener('transitionend', loadingIntro);
+          intro.removeEventListener('click', onClickIntro);
+          intro.removeEventListener('transitionend', clearEvent);
+        }
       }
     });
   </script>
