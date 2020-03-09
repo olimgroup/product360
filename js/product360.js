@@ -1,9 +1,9 @@
 (function () {
-  function ArcSlider(element, setting) {
+  function Product360(element, setting) {
     this.element = element;
     this.slider = null;
     this.default = {
-      page: 36,
+      page: 32,
       sensitivity: 3,
       auto: false,
       ratio: 2,
@@ -20,6 +20,8 @@
       mouseX: null,
       prevPos: null,
       isMobile: null,
+      sliderHeight: null,
+      sliderWidth: null,
     }
 
     for (let init in this.initial) {
@@ -27,9 +29,9 @@
     }
 
     this.classes = {
-      slider: 'arc-slider',
-      slide: 'arc-slide',
-      image: 'arc-image',
+      slider: 'pd-slider',
+      slide: 'pd-slide',
+      image: 'pd-image',
     }
 
     this.options = Object.assign({}, this.default, setting);
@@ -39,61 +41,54 @@
     this.util = new Util();
     this.isMobile = this.util.isMobile();
 
-    this._init();
+    this.util.imageLoad(this.src, (x, y) => {
+      this.width = x / this.options.page;
+      this.height = y;
+      this._init();
+    });
   }
 
-  ArcSlider.prototype._init = function () {
+  Product360.prototype._init = function () {
     const slider = this._makeElementSlider();
-    const slide = this._makeElementSlide();
     const image = this._makeElementImage();
 
-    this.slide = slide;
     this.slider = slider;
     this.image = image;
 
     this._initStyle();
 
-    slide.append(image);
-    slider.append(slide);
+    slider.append(image);
 
     this._addEvent();
   }
 
-  ArcSlider.prototype._makeElementSlider = function () {
+  Product360.prototype._makeElementSlider = function () {
     const slider = document.querySelector(this.element);
     slider.classList.add(this.classes['slider']);
 
     return slider;
   }
 
-  ArcSlider.prototype._makeElementSlide = function () {
-    const slide = document.createElement('div');
-    slide.classList.add(this.classes['slide']);
-
-    return slide;
-  }
-
-  ArcSlider.prototype._makeElementImage = function () {
+  Product360.prototype._makeElementImage = function () {
     const image = document.createElement('div');
     image.classList.add(this.classes['image']);
 
     return image;
   }
 
-  ArcSlider.prototype._initStyle = function () {
+  Product360.prototype._initStyle = function () {
     this.slider.style.overflow = 'hidden';
 
-    this.sliderWidth = this.slider.clientWidth;
-    this.height = this.sliderWidth / this.options.ratio;
+    this.ratio = this.slider.clientWidth / this.width;
+    this.sliderWidth = this.width * this.ratio;
+    this.sliderHeight = this.height * this.ratio;
 
-    this.slide.style.transform = 'translateX(0)';
     this.image.style.backgroundImage = `url(${this.src})`;
-    this.image.style.height = `${this.height}px`;
-    this.image.style.backgroundSize = `auto ${this.height}px`;
-    this.image.style.width = `${this.sliderWidth * this.options.page}px`
+    this.image.style.height = `${this.sliderHeight}px`;
+    this.image.style.backgroundSize = `auto ${this.sliderHeight}px`;
   }
 
-  ArcSlider.prototype._animation = function () {
+  Product360.prototype._animation = function () {
     const page = this.options.page - 1;
     const sensitivity = this.options.sensitivity;
 
@@ -104,25 +99,24 @@
     }
 
     if (this.index % sensitivity === 0) {
-      this.slide.style.transform = `translateX(-${this.sliderWidth * (this.index / sensitivity)}px)`;
+      this.image.style.backgroundPosition = `-${this.sliderWidth * (this.index / this.options.sensitivity)}px 0`;
     }
   }
 
-  ArcSlider.prototype.__mousedown = function (e) {
-    e.preventDefault();
+  Product360.prototype.__mousedown = function (e) {
     const x = e.clientX || e.touches[0].clientX;
 
     this.isMouseDown = true;
     this.mouseX = x;
+    e.preventDefault();
   }
 
-  ArcSlider.prototype.__mouseup = function (e) {
-    e.preventDefault();
+  Product360.prototype.__mouseup = function (e) {
     this.isMouseDown = false;
+    e.preventDefault();
   }
 
-  ArcSlider.prototype.__mousemove = function (e) {
-    e.preventDefault();
+  Product360.prototype.__mousemove = function (e) {
     const x = this.isMobile ? e.touches[0].clientX : e.clientX;
 
     if (this.prevPos !== x) {
@@ -138,12 +132,13 @@
     }
 
     this.prevPos = x;
+    e.preventDefault();
   }
 
-  ArcSlider.prototype._addEvent = function () {
-    ArcSlider.prototype._mousedown = this.__mousedown.bind(this);
-    ArcSlider.prototype._mouseup = this.__mouseup.bind(this);
-    ArcSlider.prototype._mousemove = this.__mousemove.bind(this);
+  Product360.prototype._addEvent = function () {
+    Product360.prototype._mousedown = this.__mousedown.bind(this);
+    Product360.prototype._mouseup = this.__mouseup.bind(this);
+    Product360.prototype._mousemove = this.__mousemove.bind(this);
     this._resize();
 
     if (this.isMobile) {
@@ -157,7 +152,7 @@
     }
   }
 
-  ArcSlider.prototype._removeEvent = function () {
+  Product360.prototype._removeEvent = function () {
     if (this.isMobile) {
       this.slider.removeEventListener('touchstart', this._mousedown);
       this.slider.removeEventListener('touchcancel', this._mouseup);
@@ -169,15 +164,18 @@
     }
   }
 
-  ArcSlider.prototype._resize = function () {
-    window.addEventListener('resize', this._initStyle.bind(this));
+  Product360.prototype._resize = function () {
+    window.addEventListener('resize', () => {
+      this._initStyle();
+      this.image.style.backgroundPosition = `0 0`;
+    });
   }
 
-  ArcSlider.prototype.destroy = function () {
+  Product360.prototype.destroy = function () {
     this._removeEvent();
   }
 
-  ArcSlider.prototype.reset = function () {
+  Product360.prototype.reset = function () {
     this._addEvent();
   }
 
@@ -194,13 +192,14 @@
     }
   }
 
-  Util.prototype.getImageSize = function (src) {
+  Util.prototype.imageLoad = function (src, callback) {
     const img = new Image();
     img.src = src;
     img.addEventListener('load', (e) => {
-      console.log(e.path[0].width, e.path[0].height);
+      console.log(e);
+      callback(e.path[0].width, e.path[0].height);
     });
   }
 
-  window.ArcSlider = ArcSlider;
+  window.Product360 = Product360;
 })(window);
