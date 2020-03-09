@@ -11,13 +11,13 @@
       padding: 0;
     }
 
-    .slider__wrap {
+    .pd-slider__wrap {
       position: relative;
       overflow: hidden;
       padding-bottom: 56.25%;
     }
 
-    .slider {
+    .pd-slider {
       position: absolute;
       top: 50%;
       lefT: 50%;
@@ -25,7 +25,7 @@
       width: 100%;
     }
 
-    .intro {
+    .pd-intro {
       position: absolute;
       top: 0;
       left: 0;
@@ -39,20 +39,20 @@
       justify-content: center;
     }
 
-    .intro img {
+    .pd-intro img {
       width: 50px;
     }
 
-    .intro p {
+    .pd-intro p {
       font-size: 14px;
     }
 
-    .intro.hide {
+    .pd-intro.hide {
       opacity: 0;
     }
 
-    .intro .notice,
-    .intro .loading {
+    .pd-intro .pd-notice,
+    .pd-intro .pd-loading {
       padding: 20px;
       background-color: rgba(255, 255, 255);
       border-radius: 4px;
@@ -62,26 +62,26 @@
       transition: opacity 300ms ease;
     }
 
-    .intro .notice {
+    .pd-intro .pd-notice {
       display: none;
     }
 
-    .intro .loading.hide,
-    .intro .notice.hide {
+    .pd-intro .pd-loading.hide,
+    .pd-intro .pd-notice.hide {
       opacity: 0;
     }
   </style>
 </head>
 
 <body>
-  <div class="slider__wrap">
-    <div id="slider" class="slider"></div>
-    <div class="intro">
-      <div class="loading">
+  <div class="pd-slider__wrap">
+    <div id="pd-slider" class="pd-slider"></div>
+    <div class="pd-intro">
+      <div class="pd-loading">
         <p>로딩중입니다</p>
       </div>
 
-      <div class="notice">
+      <div class="pd-notice">
         <img src="img/vr.svg" alt="">
         <p>화면위에서 마우스 드래그 혹은 터치로 움직여주세요.</p>
       </div>
@@ -90,12 +90,12 @@
   <script src="https://cdn.zipview.kr/public/javascript/product360.js"></script>
   <!-- <script src="../js/product360.js"></script> -->
   <script>
-    const intro = document.querySelector('.intro');
-    const loading = document.querySelector('.loading');
-    const notice = document.querySelector('.notice');
-    const slider = document.querySelector('#slider')
+    const intro = document.querySelector('.pd-intro');
+    const loading = document.querySelector('.pd-loading');
+    const notice = document.querySelector('.pd-notice');
+    const slider = document.querySelector('#pd-slider')
 
-    const pdSlider = new Product360('#slider', {
+    const pdSlider = new Product360('#pd-slider', {
       src: 'https://cdn.zipview.kr/webvr/service/DEMO/estate/ISO/iso001.jpg',
       sensitivity: 2,
       init() {
