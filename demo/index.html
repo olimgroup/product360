@@ -60,6 +60,7 @@
       text-align: center;
       max-width: 40%;
       transition: opacity 300ms ease;
+      user-select: none;
     }
 
     .pd-intro .pd-notice {
@@ -88,7 +89,6 @@
     </div>
   </div>
   <script src="https://cdn.zipview.kr/public/javascript/product360.js"></script>
-  <!-- <script src="../js/product360.js"></script> -->
   <script>
     const intro = document.querySelector('.pd-intro');
     const loading = document.querySelector('.pd-loading');
@@ -109,13 +109,7 @@
         function loadingIntro() {
           loading.style.display = 'none';
           notice.style.display = 'block';
-          introAni = setTimeout(closeIntro, 1500);
-          intro.addEventListener('click', onClickIntro);
-        }
-
-        function onClickIntro() {
-          clearTimeout(introAni);
-          closeIntro();
+          intro.addEventListener('click', closeIntro);
         }
 
         function closeIntro() {
@@ -126,7 +120,6 @@
         function clearEvent() {
           intro.style.display = 'none';
           loading.removeEventListener('transitionend', loadingIntro);
-          intro.removeEventListener('click', onClickIntro);
           intro.removeEventListener('transitionend', clearEvent);
         }
       }

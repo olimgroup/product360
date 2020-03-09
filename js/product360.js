@@ -185,12 +185,10 @@
 
   Product360.prototype.init = function (callback) {
     this.initFn = callback;
-    console.log(callback);
   }
 
   Product360.prototype.loaded = function (callback) {
     this.loadedFn = callback;
-    console.log(callback);
   }
 
   // Util
